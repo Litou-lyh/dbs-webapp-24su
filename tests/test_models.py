@@ -59,14 +59,14 @@ class TestRecords(TestCase):
         record = RecordFactory()
         print(record)
         record.create()
-        self.assertTrue(record.record_id is not None)
+        self.assertTrue(record.id is not None)
 
     def test_find_record(self):
         """It should Find a record by ID"""
         record = RecordFactory.create()
         db.session.add(record)
         db.session.commit()
-        found = Records.query.get(record.record_id)
+        found = Records.query.get(record.id)
         self.assertEqual(found.serialize(), record.serialize())
 
     def test_update_record(self):
@@ -83,6 +83,6 @@ class TestRecords(TestCase):
         record = RecordFactory.create()
         db.session.add(record)
         db.session.commit()
-        record_id = record.record_id
+        record_id = record.id
         record.delete()
         self.assertIsNone(Records.query.get(record_id))

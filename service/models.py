@@ -23,7 +23,7 @@ Records
 
 Attributes:
 -----------
-record_id
+id
 first_name
 last_name
 age
@@ -55,7 +55,7 @@ class Records(db.Model):
     ##################################################
     # Table Schema
     ##################################################
-    record_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # pylint: disable=invalid-name
     first_name = db.Column(db.String(100), nullable=True)
     last_name = db.Column(db.String(100), nullable=True)
     age = db.Column(db.Integer, nullable=False)
@@ -72,15 +72,15 @@ class Records(db.Model):
     def serialize(self):
         """Returns the object data in easily serializable format"""
         return {
-            "Record ID": self.record_id,
-            "First Name": self.first_name,
-            "Last Name": self.last_name,
-            "Age": self.age,
-            "Sex": self.sex,
-            "BMI": self.bmi,
-            "Children": self.children,
-            "Smoke": self.smoke,
-            "Region": self.region,
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "age": self.age,
+            "sex": self.sex,
+            "bmi": self.bmi,
+            "children": self.children,
+            "smoke": self.smoke,
+            "region": self.region,
         }
 
     @classmethod
@@ -88,17 +88,17 @@ class Records(db.Model):
         """Deserializes Records from a dictionary."""
         try:
             return cls(
-                first_name=data.get("First Name"),
-                last_name=data.get("Last Name"),
-                age=data["Age"],
-                sex=data["Sex"],
-                bmi=data["BMI"],
-                children=data["Children"],
-                smoke=data["Smoke"],
-                region=data["Region"],
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                age=data["age"],
+                bmi=data["bmi"],
+                sex=data["sex"],
+                children=data["children"],
+                smoke=data["smoke"],
+                region=data["region"],
             )
         except KeyError as e:
-            raise DataValidationError('Invalid record: missing ' + e.args[0]) from e
+            raise DataValidationError("Invalid record: missing " + e.args[0]) from e
 
     def create(self):
         """Adds a new Record to the database."""

@@ -22,10 +22,10 @@ Paths:
 ------
 GET / - Displays a UI for Selenium testing
 GET /records - Returns a list all of the Records
-GET /records/{id} - Returns the Records with a given id number
+GET /records/{record_id} - Returns the Records with a given id number
 POST /records - creates a new Records record in the database
-PUT /records/{id} - updates a Records record in the database
-DELETE /records/{id} - deletes a Records record in the database
+PUT /records/{record_id} - updates a Records record in the database
+DELETE /records/{record_id} - deletes a Records record in the database
 """
 
 from flask import request, jsonify, url_for, abort
@@ -93,7 +93,7 @@ def create_record():
     return (
         jsonify(record.serialize()),
         status.HTTP_201_CREATED,
-        {"Location": url_for("get_record", record_id=record.record_id, _external=True)},
+        {"Location": url_for("get_record", record_id=record.id, _external=True)},
     )
 
 
