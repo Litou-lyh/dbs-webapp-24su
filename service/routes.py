@@ -22,10 +22,10 @@ Paths:
 ------
 GET / - Displays a UI for Selenium testing
 GET /records - Returns a list all of the Records
-GET /records/{id} - Returns the Records with a given id number
+GET /records/{record_id} - Returns the Records with a given id number
 POST /records - creates a new Records record in the database
-PUT /records/{id} - updates a Records record in the database
-DELETE /records/{id} - deletes a Records record in the database
+PUT /records/{record_id} - updates a Records record in the database
+DELETE /records/{record_id} - deletes a Records record in the database
 """
 
 from flask import request, jsonify, url_for, abort
@@ -68,14 +68,14 @@ def list_records():
 ######################################################################
 # GET A RECORD
 ######################################################################
-@app.route("/records/<int:id>", methods=["GET"])
-def get_record(id):
+@app.route("/records/<int:record_id>", methods=["GET"])
+def get_record(record_id):
     """Returns the Record with a given id number"""
-    app.logger.info(f"Request for record with id: {id}")
-    record = Records.query.get(id)
+    app.logger.info(f"Request for record with id: {record_id}")
+    record = Records.query.get(record_id)
 
     if not record:
-        abort(status.HTTP_404_NOT_FOUND, f"Record with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Record with id '{record_id}' was not found.")
 
     return jsonify(record.serialize()), status.HTTP_200_OK
 
@@ -93,21 +93,21 @@ def create_record():
     return (
         jsonify(record.serialize()),
         status.HTTP_201_CREATED,
-        {"Location": url_for("get_record", id=record.id, _external=True)},
+        {"Location": url_for("get_record", record_id=record.id, _external=True)},
     )
 
 
 ######################################################################
 # UPDATE A RECORD
 ######################################################################
-@app.route("/records/<int:id>", methods=["PUT"])
-def update_record(id):
+@app.route("/records/<int:record_id>", methods=["PUT"])
+def update_record(record_id):
     """Updates a Record record in the database"""
     check_content_type("application/json")
-    record = Records.query.get(id)
+    record = Records.query.get(record_id)
 
     if not record:
-        abort(status.HTTP_404_NOT_FOUND, f"Record with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Record with id '{record_id}' was not found.")
 
     record_data = request.get_json()
     record.update(record_data)
@@ -117,14 +117,14 @@ def update_record(id):
 ######################################################################
 # DELETE A RECORD
 ######################################################################
-@app.route("/records/<int:id>", methods=["DELETE"])
-def delete_record(id):
+@app.route("/records/<int:record_id>", methods=["DELETE"])
+def delete_record(record_id):
     """Deletes a Record based on the id specified in the path"""
-    app.logger.info(f"Request to delete record with id: {id}")
-    record = Records.query.get(id)
+    app.logger.info(f"Request to delete record with id: {record_id}")
+    record = Records.query.get(record_id)
 
     if not record:
-        abort(status.HTTP_404_NOT_FOUND, f"Record with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Record with id '{record_id}' was not found.")
 
     record.delete()
     return "", status.HTTP_204_NO_CONTENT

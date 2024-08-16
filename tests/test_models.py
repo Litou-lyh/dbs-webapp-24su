@@ -83,6 +83,6 @@ class TestRecords(TestCase):
         record = RecordFactory.create()
         db.session.add(record)
         db.session.commit()
-        id = record.id
+        record_id = record.id
         record.delete()
-        self.assertIsNone(Records.query.get(id))
+        self.assertIsNone(Records.query.get(record_id))
