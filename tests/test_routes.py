@@ -77,7 +77,9 @@ class TestPetService(TestCase):
         """It should call the Home Page"""
         response = self.client.get("/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn(b"Health Record and Insurance Cost Prediction Service", response.data)
+        self.assertIn(
+            b"Health Record and Insurance Cost Prediction Service", response.data
+        )
 
     def test_health(self):
         """It should be healthy"""
@@ -102,17 +104,17 @@ class TestPetService(TestCase):
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
         print(data)
-        self.assertEqual(data["First Name"], record.first_name)
+        self.assertEqual(data["first_name"], record.first_name)
 
     def test_get_record(self):
         """It should get a record via GET."""
         record = RecordFactory.create()
         db.session.add(record)
         db.session.commit()
-        response = self.client.get(f"/records/{record.record_id}")
+        response = self.client.get(f"/records/{record.id}")
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data["First Name"], record.first_name)
+        self.assertEqual(data["first_name"], record.first_name)
 
     def test_update_record(self):
         """It should update a record via PUT."""
@@ -121,22 +123,22 @@ class TestPetService(TestCase):
         db.session.commit()
         updates = {"first_name": "Updated"}
         response = self.client.put(
-            f"/records/{record.record_id}",
+            f"/records/{record.id}",
             data=json.dumps(updates),
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data["First Name"], "Updated")
+        self.assertEqual(data["first_name"], "Updated")
 
     def test_delete_record(self):
         """It should delete a record via DELETE."""
         record = RecordFactory.create()
         db.session.add(record)
         db.session.commit()
-        response = self.client.delete(f"/records/{record.record_id}")
+        response = self.client.delete(f"/records/{record.id}")
         self.assertEqual(response.status_code, 204)
-        response = self.client.get(f"/records/{record.record_id}")
+        response = self.client.get(f"/records/{record.id}")
         self.assertEqual(response.status_code, 404)
 
     # ----------------------------------------------------------
@@ -150,7 +152,7 @@ class TestPetService(TestCase):
             response = self.client.post(
                 "/records",
                 data=json.dumps(record.serialize()),
-                content_type="application/json"
+                content_type="application/json",
             )
             self.assertEqual(response.status_code, 201)
             data = json.loads(response.data)

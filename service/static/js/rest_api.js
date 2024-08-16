@@ -6,25 +6,33 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#pet_id").val(res.id);
-        $("#pet_name").val(res.name);
-        $("#pet_category").val(res.category);
-        if (res.available == true) {
-            $("#pet_available").val("true");
+        $("#id").val(res.id);
+        $("#first_name").val(res.first_name);
+        $("#last_name").val(res.last_name);
+        $("#age").val(res.age);
+        $("#bmi").val(res.bmi);
+        $("#children").val(res.children);
+        $("#sex").val(res.sex);
+        $("#region").val(res.region);
+        
+        if (res.smoke == true) {
+            $("#smoke").val("true");
         } else {
-            $("#pet_available").val("false");
+            $("#smoke").val("false");
         }
-        $("#pet_gender").val(res.gender);
-        $("#pet_birthday").val(res.birthday);
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#pet_name").val("");
-        $("#pet_category").val("");
-        $("#pet_available").val("");
-        $("#pet_gender").val("");
-        $("#pet_birthday").val("");
+        $("#id").val("");
+        $("#first_name").val("");
+        $("#last_name").val("");
+        $("#age").val("");
+        $("#bmi").val("");
+        $("#children").val("");
+        $("#sex").val("Unknown");
+        $("#smoke").val("Unknown");
+        $("#region").val("Unknown");
     }
 
     // Updates the flash message area
@@ -34,30 +42,83 @@ $(function () {
     }
 
     // ****************************************
-    // Create a Pet
+    // Create a Record
     // ****************************************
 
     $("#create-btn").click(function () {
 
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-        let gender = $("#pet_gender").val();
-        let birthday = $("#pet_birthday").val();
+        let first_name = $("#first_name").val();
+        let last_name = $("#last_name").val();
+        let smoke = $("#smoke").val();
+        let age = $("#age").val();
+        let bmi = $("#bmi").val();
+        let children = $("#children").val();
+        let sex = $("#sex").val();
+        let region = $("#region").val();
+
+        let error = "";
+        if (!first_name || first_name === "") {
+            error += ", First Name"
+        }
+        if (!last_name || last_name === "") {
+            error += ", Last Name"
+        }
+        if (!age || age === "") {
+            error += ", Age"
+        }
+        if (sex === "Unknown") {
+            error += ", Sex"
+        }
+        if (!bmi || bmi === "") {
+            error += ", BMI"
+        }
+        if (!children || children === "") {
+            error += ", Children"
+        }
+        if (smoke === "Unknown") {
+            error += ", Smoke"
+        }
+        if (region === "Unknown") {     
+            error += ", Region"
+        }       
+
+        if (error !== "") {
+            flash_message("Error: Missing " + error.slice(1) + " fields!")
+            return
+        }
+
+        if (!Number.isInteger(Number(age)) || Number(age) < 0) {
+            flash_message("Error: Age should be positive integer!")
+            return
+        }
+
+        if (!Number.isInteger(Number(children)) || Number(children) < 0) {
+            flash_message("Error: Number of Children should be positive integer!")
+            return
+        }
+        if (isNaN(Number(bmi)) || Number(bmi) < 0) {
+            flash_message("Error: BMI should be positive number!")
+            return
+        }
+
+        smoke = smoke == "true";
 
         let data = {
-            "name": name,
-            "category": category,
-            "available": available,
-            "gender": gender,
-            "birthday": birthday
+            "first_name": first_name,
+            "last_name": last_name,
+            "age": age,
+            "bmi": bmi,
+            "sex": sex,
+            "children": children,
+            "smoke": smoke,
+            "region": region,
         };
 
         $("#flash_message").empty();
         
         let ajax = $.ajax({
             type: "POST",
-            url: "/pets",
+            url: "/records",
             contentType: "application/json",
             data: JSON.stringify(data),
         });
@@ -74,23 +135,23 @@ $(function () {
 
 
     // ****************************************
-    // Update a Pet
+    // Update a Record
     // ****************************************
 
     $("#update-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-        let gender = $("#pet_gender").val();
+        let id = $("#id").val();
+        let first_name = $("#first_name").val();
+        let last_name = $("#last_name").val();
+        let smoke = $("#smoke").val() == "true";
+        let sex = $("#sex").val();
         let birthday = $("#pet_birthday").val();
 
         let data = {
-            "name": name,
-            "category": category,
-            "available": available,
-            "gender": gender,
+            "first_name": first_name,
+            "last_name": last_name,
+            "smoke": smoke,
+            "sex": sex,
             "birthday": birthday
         };
 
@@ -98,7 +159,7 @@ $(function () {
 
         let ajax = $.ajax({
                 type: "PUT",
-                url: `/pets/${pet_id}`,
+                url: `/records/${id}`,
                 contentType: "application/json",
                 data: JSON.stringify(data)
             })
@@ -115,18 +176,18 @@ $(function () {
     });
 
     // ****************************************
-    // Retrieve a Pet
+    // Retrieve a Record
     // ****************************************
 
     $("#retrieve-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
+        let id = $("#id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/pets/${pet_id}`,
+            url: `/records/${id}`,
             contentType: "application/json",
             data: ''
         })
@@ -145,25 +206,25 @@ $(function () {
     });
 
     // ****************************************
-    // Delete a Pet
+    // Delete a Record
     // ****************************************
 
     $("#delete-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
+        let id = $("#id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "DELETE",
-            url: `/pets/${pet_id}`,
+            url: `/records/${id}`,
             contentType: "application/json",
             data: '',
         })
 
         ajax.done(function(res){
             clear_form_data()
-            flash_message("Pet has been Deleted!")
+            flash_message("Record has been Deleted!")
         });
 
         ajax.fail(function(res){
@@ -176,85 +237,9 @@ $(function () {
     // ****************************************
 
     $("#clear-btn").click(function () {
-        $("#pet_id").val("");
+        $("#id").val("");
         $("#flash_message").empty();
         clear_form_data()
-    });
-
-    // ****************************************
-    // Search for a Pet
-    // ****************************************
-
-    $("#search-btn").click(function () {
-
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-
-        let queryString = ""
-
-        if (name) {
-            queryString += 'name=' + name
-        }
-        if (category) {
-            if (queryString.length > 0) {
-                queryString += '&category=' + category
-            } else {
-                queryString += 'category=' + category
-            }
-        }
-        if (available) {
-            if (queryString.length > 0) {
-                queryString += '&available=' + available
-            } else {
-                queryString += 'available=' + available
-            }
-        }
-
-        $("#flash_message").empty();
-
-        let ajax = $.ajax({
-            type: "GET",
-            url: `/pets?${queryString}`,
-            contentType: "application/json",
-            data: ''
-        })
-
-        ajax.done(function(res){
-            //alert(res.toSource())
-            $("#search_results").empty();
-            let table = '<table class="table table-striped" cellpadding="10">'
-            table += '<thead><tr>'
-            table += '<th class="col-md-2">ID</th>'
-            table += '<th class="col-md-2">Name</th>'
-            table += '<th class="col-md-2">Category</th>'
-            table += '<th class="col-md-2">Available</th>'
-            table += '<th class="col-md-2">Gender</th>'
-            table += '<th class="col-md-2">Birthday</th>'
-            table += '</tr></thead><tbody>'
-            let firstPet = "";
-            for(let i = 0; i < res.length; i++) {
-                let pet = res[i];
-                table +=  `<tr id="row_${i}"><td>${pet.id}</td><td>${pet.name}</td><td>${pet.category}</td><td>${pet.available}</td><td>${pet.gender}</td><td>${pet.birthday}</td></tr>`;
-                if (i == 0) {
-                    firstPet = pet;
-                }
-            }
-            table += '</tbody></table>';
-            $("#search_results").append(table);
-
-            // copy the first result to the form
-            if (firstPet != "") {
-                update_form_data(firstPet)
-            }
-
-            flash_message("Success")
-        });
-
-        ajax.fail(function(res){
-            flash_message(res.responseJSON.message)
-        });
-
     });
 
 })

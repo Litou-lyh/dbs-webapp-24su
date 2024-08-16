@@ -29,7 +29,7 @@ class RecordFactory(factory.Factory):
 
         model = Records
 
-    record_id = factory.Sequence(lambda n: n + 1)
+    id = factory.Sequence(lambda n: n + 1)
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     age = FuzzyInteger(18, 100)
