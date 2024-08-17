@@ -103,7 +103,6 @@ class TestPetService(TestCase):
         )
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
-        print(data)
         self.assertEqual(data["first_name"], record.first_name)
 
     def test_get_record(self):
@@ -140,6 +139,26 @@ class TestPetService(TestCase):
         self.assertEqual(response.status_code, 204)
         response = self.client.get(f"/records/{record.id}")
         self.assertEqual(response.status_code, 404)
+
+    def test_predict_record(self):
+        """It should return a cost prediction"""
+        record = RecordFactory.create()
+
+        response = self.client.post(
+            "/records",
+            data=json.dumps(record.serialize()),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+
+        data = json.loads(response.data)
+        record_id = data["id"]
+
+        response = self.client.get(f"/records/{record_id}/predict", content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+
+        self.assertGreater(float(data["cost"]), 0)
 
     # ----------------------------------------------------------
     # TEST LIST

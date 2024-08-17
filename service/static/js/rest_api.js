@@ -294,6 +294,69 @@ $(function () {
     });
 
     // ****************************************
+    // Predict a Record
+    // ****************************************
+
+    $("#predict-btn").click(function () {
+
+        let id = $("#id").val();
+
+        $("#flash_message").empty();
+
+        let ajax = $.ajax({
+            type: "GET",
+            url: `/records/${id}/predict`,
+            contentType: "application/json",
+            data: ''
+        })
+
+        ajax.done(function(res){
+            $("#predict_results").empty();
+
+            let cost = parseFloat(res.cost)
+            let suggestion = ""
+            let plan = ""
+            if (cost < 10000) {
+                suggestion = "Accept"
+                plan = "normal"
+            }
+            else if (cost < 30000) {
+                suggestion = "Conditional Accept"
+                if (cost < 20000) {
+                    plan = "Enhanced Version"
+                }
+                else {
+                    plan = "Extra Condition Version"
+                }
+            }
+            else {
+                suggestion = "Refuse"
+                plan = "Only Endorsed by Manager"
+            }
+            let table = '<table class="table table-striped" cellpadding="10">'
+            table += '<thead><tr>'
+            table += '<th class="col-md-2">Record ID</th>'
+            table += '<th class="col-md-2">Cost</th>'
+            table += '<th class="col-md-2">Suggestion</th>'
+            table += '<th class="col-md-2">Plan</th>'
+            table += '</tr></thead><tbody>'
+
+            table +=  `<tr id="row_${0}"><td>${id}</td><td>${cost}</td><td>${suggestion}</td><td>${plan}</td></tr>`;
+
+            table += '</tbody></table>';
+            $("#predict_results").append(table);
+            flash_message("Success")
+        });
+
+        ajax.fail(function(res){
+            clear_form_data()
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+
+    // ****************************************
     // Clear the form
     // ****************************************
 
