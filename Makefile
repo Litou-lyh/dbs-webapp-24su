@@ -44,7 +44,7 @@ lint: ## Run the linter
 .PHONY: test
 test: ## Run the unit tests
 	$(info Running tests...)
-	export RETRY_COUNT=1; pytest --disable-warnings
+	export RETRY_COUNT=1; pytest --disable-warnings service/ tests/
 
 .PHONY: run
 run: ## Run the service

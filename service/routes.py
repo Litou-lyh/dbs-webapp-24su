@@ -30,8 +30,10 @@ DELETE /records/{record_id} - deletes a Records record in the database
 
 from flask import request, jsonify, url_for, abort
 from flask import current_app as app  # Import Flask application
+import pandas as pd
 from service.models import Records
 from service.common import status  # HTTP Status Codes
+from service.ml_model import xgb, scaler
 
 
 ######################################################################
@@ -128,6 +130,47 @@ def delete_record(record_id):
 
     record.delete()
     return "", status.HTTP_204_NO_CONTENT
+
+
+######################################################################
+# PREDICT A RECORD
+######################################################################
+@app.route("/records/<int:record_id>/predict", methods=["GET"])
+def predict_record(record_id):
+    """Predict the cost of a health record with PUT request"""
+    app.logger.info(f"Request to predict record with id: {record_id}")
+    record = Records.query.get(record_id)
+
+    if record:
+        record = record.serialize()
+    else:
+        return "", status.HTTP_404_NOT_FOUND
+
+    sex_cats = ["female", "male"]
+    smoke_cats = ["no", "yes"]
+    region_cats = ["southeast", "southwest", "northeast", "northwest"]
+
+    record["smoke"] = smoke_cats[record["smoke"]]
+
+    data = pd.DataFrame([record])
+
+    data['sex'] = pd.Categorical(data['sex'], categories=sex_cats)
+    data['smoke'] = pd.Categorical(data['smoke'], categories=smoke_cats)
+    data['region'] = pd.Categorical(data['region'], categories=region_cats)
+
+    data = pd.get_dummies(data, columns=["sex", "smoke", "region"])
+
+    data["charges"] = 10000
+    data[["age", "bmi", "children", "charges"]] = scaler.transform(data[["age", "bmi", "children", "charges"]])
+    data = data.drop("charges", axis=1)
+
+    columns = ['age', 'bmi', 'children', 'sex_female', 'sex_male', 'smoke_no', 'smoke_yes',
+               'region_northeast', 'region_northwest', 'region_southeast', 'region_southwest']
+    data = data[columns]
+    prediction = xgb.predict(data)[0]
+    result = {"cost": f"{prediction * scaler.scale_[-1] + scaler.mean_[-1]}"}
+
+    return jsonify(result), status.HTTP_200_OK
 
 
 ######################################################################
