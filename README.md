@@ -3,7 +3,9 @@
 [![Build Status](https://github.com/Litou-lyh/dbs-webapp-24su/actions/workflows/tdd-tests.yml/badge.svg)](https://github.com/Litou-lyh/dbs-webapp-24su/actions)
 [![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Litou-lyh/dbs-webapp-24su)
 
-The sample code is using [Flask micro-framework](http://flask.pocoo.org/). It also uses [PostgreSQL](https://www.postgresql.org) as a database. Input data will be passed through RestFUL API for backend processing. CRUD operations are implemented using Object–Relational Mapping (ORM), and data is then stored in PostgreSQL database. We integreated an XGBoost model for insurance cost prediction. The prediction function is also called by RestFUL API.
+This repository is the code of Final Project (part4) for course [Database Systems](https://cs.nyu.edu/~jcf/classes/CSCI-GA.2433-001/) by Prof. Jean-Claude Franchitti. We have deploy the application using Microsoft Azure Cloud Service at [here](https://dbs-webapp-24su-b6hdeedegne8afcb.eastus-01.azurewebsites.net/). Please feel free to try out!
+
+The code is using [Flask micro-framework](http://flask.pocoo.org/). It also uses [PostgreSQL](https://www.postgresql.org) as a database. Input data will be passed through RestFUL API for backend processing. CRUD operations are implemented using Object–Relational Mapping (ORM), and data is then stored in PostgreSQL database. We integreated an XGBoost model for insurance cost prediction. The prediction function is also called by RestFUL API.
 
 This repository is based on a lab from the *NYU DevOps and Agile Methodologies* graduate course [CSCI-GA.2820-001](https://cs.nyu.edu/courses/fall22/CSCI-GA.2820-001/) on Behavior Driven Development with Flask and Behave
 
@@ -40,6 +42,9 @@ In this project, We focus on the business use case of insurance cost prediction:
 
 Now you can access in your browser with this URL: `http://localhost:8080/` 
 
+#### Deployment using Microsoft Azure Cloud Service
+We have deploy the application using Microsoft Azure Cloud Service at [here](https://dbs-webapp-24su-b6hdeedegne8afcb.eastus-01.azurewebsites.net/). Please feel free to try out!
+
 ### User guide
 - To Create a health record:
   1. Fill out the form with valid data. (Leave Record ID blank; age must be positive integer; BMI must be positive number)
@@ -66,9 +71,9 @@ Now you can access in your browser with this URL: `http://localhost:8080/`
   2. Enter the record id.
   3. Click "Predict" button.
   4. If succcess: then a flash message says "Success" and the predicted results will be displayed in the result table below.
-    - Cost: predicted insurance cost
-    - Suggestion: suggestions to the insurance operator. (Accept, Conditional Accept, and Refuse)
-    - Plan: different level of plans could be applied. (Normal, Enhanced Version, Extra Condition Version, and Only Endorsed by Manager)
+      - Cost: predicted insurance cost
+      - Suggestion: suggestions to the insurance operator. (Accept, Conditional Accept, and Refuse)
+      - Plan: different level of plans could be applied. (Normal, Enhanced Version, Extra Condition Version, and Only Endorsed by Manager)
 
 ---
 
