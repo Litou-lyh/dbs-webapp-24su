@@ -25,6 +25,78 @@ In this project, We focus on the business use case of insurance cost prediction:
 ./tests/test_models.py -- unit test cases for the model
 ```
 
+
+## Instruction of deployment and usage
+
+### Deployment
+
+### User guide
+- To Create a health record:
+  1. Fill out the form with valid data. (Leave Record ID blank; age must be positive integer; BMI must be positive number)
+  2. Click "Create" button.
+  3. Wait the record id appears in the form, together with a flash message says "success"
+
+- To Retrieve a health record:
+  1. Enter record id.
+  2. Click "Retrieve" button.
+  3. If succcess: all the fields will be filled with data, If fail: flash message says "404 Not Found"
+
+- To Update a health record:
+  1. Fill out the form with valid data, including Record ID of the record you want to modify.
+  2. Click "Update" button.
+  3. If success, then a flash message says "success". If you retrieve the record later, the fields will be updated.
+ 
+- To Delete a health record:
+  1. Enter record id.
+  2. Click "Delete" button.
+  3. If succcess: then a flash message says "Record has been Deleted!"; If the record does not exist: then a flash message says "Server error!"
+ 
+- To predict the cost of a health record:
+  1. After you create the record !!!
+  2. Enter the record id.
+  3. Click "Predict" button.
+  4. If succcess: then a flash message says "Success" and the predicted results will be displayed in the result table below.
+    - Cost: predicted insurance cost
+    - Suggestion: suggestions to the insurance operator. (Accept, Conditional Accept, and Refuse)
+    - Plan: different level of plans could be applied. (Normal, Enhanced Version, Extra Condition Version, and Only Endorsed by Manager)
+
+---
+
+ <div style="text-align: center; margin: 0 auto;">
+  <img src="https://github.com/user-attachments/assets/e63d3da5-3f92-4515-9f19-aa02bba4bb1d" alt="homepage" width="75%">
+  <p><strong>Figure 1: Homepage</strong></p>
+</div>
+
+<hr>
+
+<div style="text-align: center; margin: 0 auto;">
+  <img src="https://github.com/user-attachments/assets/a1d6aa56-c1d1-48d7-9373-b0aafeff093a" alt="create_record" width="75%">
+  <p><strong>Figure 2: Create Record</strong></p>
+</div>
+
+<hr>
+
+<div style="text-align: center; margin: 0 auto;">
+  <img src="https://github.com/user-attachments/assets/85780f79-56bb-4f07-8845-6a496db00bf6" alt="example_of_invalid_data" width="75%">
+  <p><strong>Figure 3: Example of Invalid Data</strong></p>
+</div>
+
+<hr>
+
+<div style="text-align: center; margin: 0 auto;">
+  <img src="https://github.com/user-attachments/assets/a2b4e045-3123-4493-af57-c36f732cebfc" alt="prediction" width="75%">
+  <p><strong>Figure 4: Prediction</strong></p>
+</div>
+
+<hr>
+
+<div style="text-align: center; margin: 0 auto;">
+  <img src="https://github.com/user-attachments/assets/ebef20b1-250a-4fc8-8640-19369a37cf52" alt="example_of_refuse" width="75%">
+  <p><strong>Figure 5: Example of Refuse</strong></p>
+</div>
+
+
+ 
 ## License
 
 Copyright (c) 2016, 2024, John J. Rofrano. All rights reserved.
