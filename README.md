@@ -36,7 +36,7 @@ In this project, We focus on the business use case of insurance cost prediction:
 
 #### Run It Locally
 
-`docker docker run --rm -p 8888:8080 --platform linux/amd64 gorgeous/dbs-webapp-24su:v6`
+`docker docker run --rm -p 8080:8080 --platform linux/amd64 gorgeous/dbs-webapp-24su:v6`
 
 Now you can access in your browser with this URL: `http://localhost:8080/` 
 
