@@ -13,7 +13,7 @@ Many enterprises still rely on structured data in traditional relational databas
 
 We try to build a project following this idea, and provide a end-to-end web app integrating relational database and ML models.
 
-In this project, We focus on the business use case of insurance cost prediction: customer's health condition and daily habits are significant indicators to their insurance cost, and insurance companies rely heavily on precise on prediction models to provide appropriate insurance policies and products. With machine learning models, for insurance companies, we help them accelerate cost assessment procedures, and lower their risks on unpredicted insurance claims; for customers, we help them get their suitable insurance products.
+In this project, We focus on the business use case of insurance cost prediction: customer's health condition and daily habits are significant indicators to their insurance cost, and insurance companies rely heavily on precise prediction models to provide appropriate insurance policies and products. With machine learning models, for insurance companies, we help them accelerate cost assessment procedures, and lower their risks on unpredicted insurance claims; for customers, we help them get their suitable insurance products.
 
 ## What's featured in the project?
 
